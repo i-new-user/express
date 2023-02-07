@@ -66,6 +66,25 @@ app.get('/videos', (req: Request, res: Response) => {
     res.status(HTTP_STATUSES.OK_200).json(videos)
 })
 
+app.get('/videos/:id', (req: Request, res: Response) => {
+    let video = videos.find(v => v.id === +req.params.id)
+    if(!video){
+        res.status(HTTP_STATUSES.NOT_FOUND_404).json(error)
+    }else{
+        res.status(HTTP_STATUSES.OK_200).json(videos) 
+    }
+   
+   
+    // !video 
+    // ? res.status(HTTP_STATUSES.NOT_FOUND_404).json(error)
+    // : res.status(HTTP_STATUSES.OK_200).json(videos)
+})
+
+app.delete('/testing/all-data', (req: Request, res: Response) => {
+    videos = [];
+    res.status(HTTP_STATUSES.NO_CONTENT_204)
+})
+
 app.listen(port, () => {
     console.log('Start')
 })
