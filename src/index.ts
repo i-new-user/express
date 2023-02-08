@@ -75,6 +75,9 @@ export const error = {"errorsMessages":[{
  }]
 }
 
+app.get('/', (req: Request, res: Response) => {
+    res.send('Hello')
+})
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     videos.splice(0, videos.length);
