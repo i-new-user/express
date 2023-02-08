@@ -78,7 +78,7 @@ export const error = {"errorsMessages":[{
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     videos.splice(0, videos.length);
-    res.status(HTTP_STATUSES.NO_CONTENT_204)
+    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    
 })
 
