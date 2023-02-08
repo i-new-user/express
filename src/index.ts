@@ -75,15 +75,10 @@ export const error = {"errorsMessages":[{
  }]
 }
 
-app.get('/', (req: Request, res: Response) => {
-    
-    res.send('<h1>Hello world !!! >>>>>>>><h1>')
-})
-
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     videos.splice(0, videos.length);
-    res.status(HTTP_STATUSES.NO_CONTENT_204)
+    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    
 })
 
@@ -157,6 +152,6 @@ app.delete('/videos/:id', (req: Request, res: Response) => {
 
 
 
-app.listen(port, () => {
-    console.log(`Start port ${port}`)
-})
+// app.listen(port, () => {
+//     console.log(`Start port ${port}`)
+// })

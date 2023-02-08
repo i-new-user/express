@@ -16,19 +16,5 @@ describe('Test CRUD',() => {
 
         expect(res.status).toBe(HTTP_STATUSES.OK_200)
     })   
-     // expect( res.body ).toEqual(
-        //     expect.arrayContaining([
-        //         expect.objectContaining({
-        //             id: expect.any(String),
-        //             title: expect.any(String),
-        //             author: expect.any(String),
-        //             canBeDownloaded:expect.any(Boolean),
-        //             minAgeRestriction:expect.any(null),
-        //             createdAt: expect.any(String),
-        //             publicationDate: expect.any(String),
-        //             availableResolutions: expect.any(Array<string>)
-
-        //         })
-        //     ])
-        // )
+    
 })
