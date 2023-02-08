@@ -1,18 +1,25 @@
-import express, {Request, Response} from 'express'
+import express, {Request, Response, Router} from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser';
+import {body} from 'express-validator'
 
-const app = express();
-const port = 3005;
+
+
+export const app = express();
+const port = 5000;
 
 app.use(cors())
 app.use(bodyParser.json())
+
+
+
 
 export type VideosType = {
     id: number
     title: string
     author: string
     canBeDownloaded: boolean
+    minAgeRestriction: Number | null
     createdAt: string
     publicationDate: string
     availableResolution: Array<ResolutionsType>
@@ -20,13 +27,13 @@ export type VideosType = {
 
 export type ResolutionsType = Array<string>
     
-let videos = [
+export let videos = [
     {
         id: 1,
         title: "Ocean",
         author: "it-incubator",
         canBeDownloaded: false,
-        minAgeRestriction: null,
+        minAgeRestriction:  null,
         createdAt: new Date().toISOString(),
         publicationDate: new Date( new Date().setDate(new Date().getDate() + 1) ).toISOString(),
         availableResolutions: ["P144"]
@@ -53,7 +60,7 @@ let videos = [
     }
 ]
 
-const HTTP_STATUSES = {
+export const HTTP_STATUSES = {
     OK_200: 200,
     CREATED_201: 201,
     NO_CONTENT_204: 204,
@@ -62,7 +69,7 @@ const HTTP_STATUSES = {
     NOT_FOUND_404: 404
 }
 
-const error = {"errorsMessages":[{
+export const error = {"errorsMessages":[{
     "message": "If video for passed id doesn't exist",
      "field": "If video for passed id doesn't exist"
  }]
@@ -102,8 +109,7 @@ app.post('/videos', (req: Request, res: Response) => {
     }
     
     if(!title || title.length > 40 || typeof title !== 'string' ||
-       !author || author.length > 20 || typeof author !== 'string' ||
-       !availableResolutions || availableResolutions.length < 1){
+       !author || author.length > 20 || typeof author !== 'string'){
 
         res.status(HTTP_STATUSES.BAD_REQUST_400).json(error)
     } else {
@@ -115,14 +121,26 @@ app.post('/videos', (req: Request, res: Response) => {
 app.get('/videos/:id', (req: Request, res: Response) => {
     let video = videos.find(v => v.id === +req.params.id)
   
-    !video 
-    ? res.status(HTTP_STATUSES.NOT_FOUND_404)
-    : res.status(HTTP_STATUSES.OK_200).json(video)
+    video 
+    ? res.status(HTTP_STATUSES.OK_200).json(video) 
+    : res.status(HTTP_STATUSES.NOT_FOUND_404)
+    
 })
 
 
-app.put('/videos', (req: Request, res: Response) => {
+app.put('/videos/:id', (req: Request, res: Response) => {
+    
+   let video = videos.find(v => v.id === +req.params.id)
    
+  
+   
+   if(video){
+         video.title = req.body.title;
+         video.author = req.body.author;
+        res.status(HTTP_STATUSES.NO_CONTENT_204)
+   } else {
+          res.status(HTTP_STATUSES.NOT_FOUND_404)
+   } 
 })
 
 app.delete('/videos/:id', (req: Request, res: Response) => {
@@ -140,5 +158,5 @@ app.delete('/videos/:id', (req: Request, res: Response) => {
 
 
 app.listen(port, () => {
-    console.log('Start')
+    console.log(`Start port ${port}`)
 })
