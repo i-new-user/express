@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 exports.app = (0, express_1.default)();
-const port = 5000;
+const port = 3001;
 exports.app.use((0, cors_1.default)());
 exports.app.use(body_parser_1.default.json());
 exports.videos = [
@@ -55,9 +55,6 @@ exports.error = { "errorsMessages": [{
             "field": "If video for passed id doesn't exist"
         }]
 };
-exports.app.get('/', (req, res) => {
-    res.send('<h1>Hello world !!! >>>>>>>><h1>');
-});
 exports.app.delete('/testing/all-data', (req, res) => {
     exports.videos.splice(0, exports.videos.length);
     res.status(exports.HTTP_STATUSES.NO_CONTENT_204);

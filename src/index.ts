@@ -6,7 +6,7 @@ import {body} from 'express-validator'
 
 
 export const app = express();
-const port = 5000;
+const port = 3001;
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -78,7 +78,7 @@ export const error = {"errorsMessages":[{
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     videos.splice(0, videos.length);
-    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    res.status(HTTP_STATUSES.NO_CONTENT_204)
    
 })
 
@@ -152,6 +152,6 @@ app.delete('/videos/:id', (req: Request, res: Response) => {
 
 
 
-// app.listen(port, () => {
-//     console.log(`Start port ${port}`)
-// })
+app.listen(port, () => {
+    console.log(`Start port ${port}`)
+})
