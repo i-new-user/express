@@ -86,7 +86,7 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
 })
 
 app.get('/videos', (req: Request, res: Response) => {
-    res.status(HTTP_STATUSES.OK_200).json(videos)
+    res.sendStatus(HTTP_STATUSES.OK_200).json(videos)
 })
 
 app.post('/videos', (req: Request, res: Response) => {
@@ -109,10 +109,10 @@ app.post('/videos', (req: Request, res: Response) => {
     if(!title || title.length > 40 || typeof title !== 'string' ||
        !author || author.length > 20 || typeof author !== 'string'){
 
-        res.status(HTTP_STATUSES.BAD_REQUST_400).json(error)
+        res.sendStatus(HTTP_STATUSES.BAD_REQUST_400).json(error)
     } else {
         videos.push(newVideo);
-        res.status(HTTP_STATUSES.CREATED_201).json(newVideo)
+        res.sendStatus(HTTP_STATUSES.CREATED_201).json(newVideo)
     }
 })
 
@@ -120,8 +120,8 @@ app.get('/videos/:id', (req: Request, res: Response) => {
     let video = videos.find(v => v.id === +req.params.id)
   
     video 
-    ? res.status(HTTP_STATUSES.OK_200).json(video) 
-    : res.status(HTTP_STATUSES.NOT_FOUND_404)
+    ? res.sendStatus(HTTP_STATUSES.OK_200).json(video) 
+    : res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     
 })
 
@@ -135,9 +135,9 @@ app.put('/videos/:id', (req: Request, res: Response) => {
    if(video){
          video.title = req.body.title;
          video.author = req.body.author;
-        res.status(HTTP_STATUSES.NO_CONTENT_204)
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
-          res.status(HTTP_STATUSES.NOT_FOUND_404)
+          res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
    } 
 })
 
@@ -146,11 +146,11 @@ app.delete('/videos/:id', (req: Request, res: Response) => {
     for(let i = 0; i < videos.length; i++){
         if(videos[i].id === +req.params.id){
             videos.splice(i,1)
-            res.status(HTTP_STATUSES.NO_CONTENT_204)
+            res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
             return;
         }
     }
-    res.status(HTTP_STATUSES.NOT_FOUND_404)
+    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
 })
 
 
