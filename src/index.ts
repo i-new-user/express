@@ -86,7 +86,7 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
 })
 
 app.get('/videos', (req: Request, res: Response) => {
-    res.sendStatus(HTTP_STATUSES.OK_200).json(videos)
+    res.sendStatus(HTTP_STATUSES.OK_200).send(videos)
 })
 
 app.post('/videos', (req: Request, res: Response) => {
@@ -109,10 +109,10 @@ app.post('/videos', (req: Request, res: Response) => {
     if(!title || title.length > 40 || typeof title !== 'string' ||
        !author || author.length > 20 || typeof author !== 'string'){
 
-        res.sendStatus(HTTP_STATUSES.BAD_REQUST_400).json(error)
+        res.sendStatus(HTTP_STATUSES.BAD_REQUST_400).send(error)
     } else {
         videos.push(newVideo);
-        res.sendStatus(HTTP_STATUSES.CREATED_201).json(newVideo)
+        res.sendStatus(HTTP_STATUSES.CREATED_201).send(newVideo)
     }
 })
 
@@ -120,7 +120,7 @@ app.get('/videos/:id', (req: Request, res: Response) => {
     let video = videos.find(v => v.id === +req.params.id)
   
     video 
-    ? res.sendStatus(HTTP_STATUSES.OK_200).json(video) 
+    ? res.sendStatus(HTTP_STATUSES.OK_200).send(video) 
     : res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     
 })
