@@ -18,12 +18,19 @@ routerVideos.get('/', async (req: Request, res: Response) => {
 
 routerVideos.post('/',
 
-    authMiddleware,
-    body('title').trim().isLength({min: 10, max: 40}),
-    imputValidatorMiddlevare,
+    // authMiddleware,
+    // body('title').trim().isLength({min: 10, max: 40}),
+    // imputValidatorMiddlevare,
     
     (req: Request<{},{},{title: string, author: string},{}>, res: Response) => {
-    let error = {};
+    let error = {
+        errorsMessages:[
+            {
+                message: 'error',
+                field: 'title'
+            }
+        ]
+    };
     
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author)
 
@@ -45,7 +52,14 @@ routerVideos.get('/:id', (req: Request, res: Response) => {
 
 
 routerVideos.put('/:id', (req: Request, res: Response) => {
-    const error= {};
+    const error= {
+        errorsMessages:[
+            {
+                message: 'error',
+                field: 'title'
+            }
+        ]
+    };
 
    let updateVideo =  videosRepository.updateVideosById(+req.params.id,
                                                         req.body.title,
