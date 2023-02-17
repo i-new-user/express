@@ -22,7 +22,7 @@ export type VideosType = {
     minAgeRestriction: Number | null
     createdAt: string
     publicationDate: string
-    availableResolution: Array<ResolutionsType>
+    availableResolution: ResolutionsType
 }
 
 
@@ -68,16 +68,44 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
    
 })
 
+app.post('/videos', (req: Request, res: Response) => {
+   
+   let title = req.body.title
+   let author = req.body.author
+   
+   let newVideo = {
+    id: +(new Date().toISOString()),
+    title: title,
+    author: author,
+    canBeDownloaded: req.body.canBeDownloaded || false,
+    minAgeRestriction: req.body.minAgeRestriction || null,
+    createdAt: new Date().toISOString(),
+    publicationDate: new Date( new Date().setDate(new Date().getDate() + 1) ).toISOString(),
+    availableResolutions: req.body.availableResolutions || ["P144"],
+
+   }
+
+   !title || title.length > 40 || typeof title !== 'string' ||
+   !author || author.length > 20 || typeof author !== 'string' ?
+
+   res.sendStatus(HTTP_STATUSES.BAD_REQUST_400).send(error) :
+  
+   videos.push(newVideo)
+   res.send(newVideo).sendStatus(HTTP_STATUSES.CREATED_201) ;
+  
+})
+
 app.get('/videos', (req: Request, res: Response) => {
     res.send(videos).sendStatus(HTTP_STATUSES.OK_200)
 })
 
-// app.get('/videos/:id', (req: Request, res: Response) => {
-//     let video = videos.find(v => v.id === +req.params.id)
-//     video ?
-//     res.send(video).sendStatus(HTTP_STATUSES.OK_200) :
-//     res.send(error).sendStatus(HTTP_STATUSES.NOT_FOUND_404) ;
-// })
+app.get('/videos/:id', (req: Request, res: Response) => {
+    let video = videos.find(v => v.id === +req.params.id)
+    video ?
+    res.send(video).sendStatus(HTTP_STATUSES.OK_200) :
+    res.send(error).sendStatus(HTTP_STATUSES.NOT_FOUND_404) ;
+})
+
 
 // !video || !String(video).trim() || (video.length < 10 && video.length > 40)
 
