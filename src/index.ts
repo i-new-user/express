@@ -54,6 +54,26 @@ export let videos = [
         createdAt: new Date().toISOString(),
         publicationDate: new Date( new Date().setDate(new Date().getDate() + 1) ).toISOString(),
         availableResolutions: ["P144"]
+     },
+     {
+        id: 2,
+        title: "Nature",
+        author: "it-incubator",
+        canBeDownloaded: false,
+        minAgeRestriction:  null,
+        createdAt: new Date().toISOString(),
+        publicationDate: new Date( new Date().setDate(new Date().getDate() + 1) ).toISOString(),
+        availableResolutions: ["P144"]
+     },
+     {
+        id: 3,
+        title: "Space",
+        author: "it-incubator",
+        canBeDownloaded: false,
+        minAgeRestriction:  null,
+        createdAt: new Date().toISOString(),
+        publicationDate: new Date( new Date().setDate(new Date().getDate() + 1) ).toISOString(),
+        availableResolutions: ["P144"]
      }
 ]
 
@@ -72,6 +92,7 @@ app.post('/videos', (req: Request, res: Response) => {
    
    let title = req.body.title
    let author = req.body.author
+   let availableResolutions = req.body.availableResolutions
    
    let newVideo = {
     id: +(new Date().toISOString()),
@@ -81,14 +102,14 @@ app.post('/videos', (req: Request, res: Response) => {
     minAgeRestriction: req.body.minAgeRestriction || null,
     createdAt: new Date().toISOString(),
     publicationDate: new Date( new Date().setDate(new Date().getDate() + 1) ).toISOString(),
-    availableResolutions: req.body.availableResolutions || ["P144"],
+    availableResolutions:  availableResolutions || ["P144"],
 
    }
 
    !title || title.length > 40 || typeof title !== 'string' ||
    !author || author.length > 20 || typeof author !== 'string' ?
 
-   res.sendStatus(HTTP_STATUSES.BAD_REQUST_400).send(error) :
+   res.send(error).sendStatus(HTTP_STATUSES.BAD_REQUST_400) :
   
    videos.push(newVideo)
    res.send(newVideo).sendStatus(HTTP_STATUSES.CREATED_201) ;
@@ -106,13 +127,47 @@ app.get('/videos/:id', (req: Request, res: Response) => {
     res.send(error).sendStatus(HTTP_STATUSES.NOT_FOUND_404) ;
 })
 
+app.put('/videos/:id', (req: Request, res: Response) => {
 
-// !video || !String(video).trim() || (video.length < 10 && video.length > 40)
+    let video = videos.find(v => v.id === +req.params.id)
+
+    if (video){
+
+        video.title = req.body.title;
+        video.author = req.body.author;
+        video.availableResolutions = req.body.availableResolutions || ["P144"];
+        video.canBeDownloaded = req.body.canBeDownloaded || false;
+        video.minAgeRestriction = req.body.titminAgeRestrictionle || 17;
+        video.publicationDate = req.body.publicationDate || new Date().toISOString();
+
+       if(video.title.length > 40  ||  video.author.length > 20 ||  video.availableResolutions.length < 1  ){
+
+           res.sendStatus(HTTP_STATUSES.BAD_REQUST_400)
+       } else {
+           res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+       }
+
+    } else {
+        res.send(error).sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+    }
+
+})
 
 
 
+app.delete('/videos/:id', (req: Request, res: Response) => {
+    
+    for(let i = 0; i < videos.length; i++){
+        if(videos[i].id === +req.params.id){
+            videos.splice(i,1)
+            res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+            return;
+        }
+        res.send(error).sendStatus(HTTP_STATUSES.NOT_FOUND_404) ;
+    }
 
-
+    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404) ;
+})
 
 
 
